@@ -1,13 +1,13 @@
 package com.clime.models;
 
-import com.clime.annotations.CliCommand;
+import com.clime.annotations.CliMeCommand;
 
-@CliCommand
-public class TestObjectTwo {
+@CliMeCommand
+public class ExplicitDefaultConstructor {
 
     private String field;
 
-    public TestObjectTwo() {
+    public ExplicitDefaultConstructor() {
         field = "Zap! /\\/";
     }
 

@@ -1,9 +1,9 @@
 package com.clime.models;
 
-import com.clime.annotations.CliCommand;
+import com.clime.annotations.CliMeCommand;
 
-@CliCommand
-public class TestObjectOne {
+@CliMeCommand
+public class SimpleObject {
 
     public String hello() {
         return "Hello!";

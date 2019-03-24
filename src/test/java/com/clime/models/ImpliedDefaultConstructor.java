@@ -1,9 +1,9 @@
 package com.clime.models;
 
-import com.clime.annotations.CliCommand;
+import com.clime.annotations.CliMeCommand;
 
-@CliCommand
-public class TestObjectThree {
+@CliMeCommand
+public class ImpliedDefaultConstructor {
 
     public String greet(String greeting) {
         return greeting;

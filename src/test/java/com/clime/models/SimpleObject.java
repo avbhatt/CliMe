@@ -9,7 +9,11 @@ public class SimpleObject {
         return "Hello!";
     }
 
-    public Integer goodNumber(Integer number) {
+    public Integer goodNumber(int number) {
         return number;
+    }
+
+    public String greeting(String greet) {
+        return greet;
     }
 }

@@ -4,14 +4,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.failBecauseExceptionWasNotThrown;
 
 import com.clime.exceptions.CliMeUsageException;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class ArgCollectorTest {
+class ArgCollectorTest {
 
     private ArgCollector argCollector;
 
     @Test
-    public void collectClassAndMethod() throws Exception {
+    void collectClassAndMethod() throws Exception {
         String command = "bestCommand okSubCommand";
         argCollector = new ArgCollector(command);
 
@@ -24,7 +24,7 @@ public class ArgCollectorTest {
     }
 
     @Test
-    public void collectClassAndMethodAndParameter() throws Exception {
+    void collectClassAndMethodAndParameter() throws Exception {
         String command = "bestCommand okSubCommand val1";
         argCollector = new ArgCollector(command);
 
@@ -38,7 +38,7 @@ public class ArgCollectorTest {
     }
 
     @Test
-    public void collectClassAndMethodAndParameters() throws Exception {
+    void collectClassAndMethodAndParameters() throws Exception {
         String command = "bestCommand okSubCommand val1 me";
         argCollector = new ArgCollector(command);
 
@@ -53,7 +53,7 @@ public class ArgCollectorTest {
     }
 
     @Test
-    public void exitTrueWhenExitCommand() throws Exception {
+    void exitTrueWhenExitCommand() throws Exception {
         String command = "exit";
         argCollector = new ArgCollector(command);
 
@@ -66,7 +66,7 @@ public class ArgCollectorTest {
     }
 
     @Test
-    public void exitFalseWhenExitCommandAndMore() throws Exception {
+    void exitFalseWhenExitCommandAndMore() throws Exception {
         String command = "exit subCommand 123";
         argCollector = new ArgCollector(command);
 
@@ -79,7 +79,7 @@ public class ArgCollectorTest {
     }
 
     @Test
-    public void exceptionWhenNoCommand() throws Exception {
+    void exceptionWhenNoCommand() throws Exception {
         String command = "";
 
         try {
@@ -91,7 +91,7 @@ public class ArgCollectorTest {
     }
 
     @Test
-    public void exceptionWhenNoSubCommand() throws Exception {
+    void exceptionWhenNoSubCommand() throws Exception {
         String command = "bestCommand";
 
         try {
@@ -103,7 +103,7 @@ public class ArgCollectorTest {
     }
 
     @Test
-    public void collectLongParameters() throws Exception {
+    void collectLongParameters() throws Exception {
         String command = "bestCommand okSubCommand \"val1 is best value\" \"me is good dude\"";
         argCollector = new ArgCollector(command);
 
@@ -118,7 +118,7 @@ public class ArgCollectorTest {
     }
 
     @Test
-    public void collectHyphenAndUnderscoreParameters() throws Exception {
+    void collectHyphenAndUnderscoreParameters() throws Exception {
         String command = "bestCommand okSubCommand val1_is_best_value me-is-good-dude";
         argCollector = new ArgCollector(command);
 

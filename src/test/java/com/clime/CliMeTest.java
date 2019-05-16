@@ -17,15 +17,15 @@ import java.io.PrintStream;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.reflections.Reflections;
 
-public class CliMeTest {
+class CliMeTest {
 
     @Test
-    public void dependencyContainerKeyedOnAnnotatedClass() throws Exception {
+    void dependencyContainerKeyedOnAnnotatedClass() {
         Reflections mockReflections = Mockito.mock(Reflections.class);
         Set<Class<?>> expectedClasses = Sets.newHashSet(CliMeInitCreator.class, ExplicitDefaultConstructor.class, SimpleObject.class);
         Mockito.when(mockReflections.getTypesAnnotatedWith(CliMeCommand.class)).thenReturn(expectedClasses);
@@ -34,7 +34,7 @@ public class CliMeTest {
     }
 
     @Test
-    public void dependencyContainerHasObjectOfKeyType() throws Exception {
+    void dependencyContainerHasObjectOfKeyType() {
         Reflections mockReflections = Mockito.mock(Reflections.class);
         Set<Class<?>> expectedClasses = Sets.newHashSet(CliMeInitCreator.class, ExplicitDefaultConstructor.class, SimpleObject.class);
         Mockito.when(mockReflections.getTypesAnnotatedWith(CliMeCommand.class)).thenReturn(expectedClasses);
@@ -45,7 +45,7 @@ public class CliMeTest {
     }
 
     @Test
-    public void throwIllegalArgExceptionOnDuplicateConstructorInjection() {
+    void throwIllegalArgExceptionOnDuplicateConstructorInjection() {
         LinkedHashSet<Object> dependencies = Sets.newLinkedHashSet();
         com.clime.badmodels.dupemodels.dupe.DupeObject badDupe1 = new com.clime.badmodels.dupemodels.dupe.DupeObject();
         DupeObject badDupe = new DupeObject();
@@ -60,7 +60,7 @@ public class CliMeTest {
     }
 
     @Test
-    public void throwIllegalArgExceptionOnDuplicatesAnnotationScan() {
+    void throwIllegalArgExceptionOnDuplicatesAnnotationScan() {
         try {
             new CliMe("cli", "com.clime.badmodels.dupemodels");
             failBecauseExceptionWasNotThrown(IllegalArgumentException.class);
@@ -70,7 +70,7 @@ public class CliMeTest {
     }
 
     @Test
-    public void dependencyHasMethodNameAsKey() throws Exception {
+    void dependencyHasMethodNameAsKey() {
         Map<String, ObjectContainer> classMethods = CliMe.initializeObjects(new Reflections("com.clime.models"));
         assertThat(classMethods).containsKeys("SimpleObject".toLowerCase(), "ExplicitDefaultConstructor".toLowerCase(), "ImpliedDefaultConstructor".toLowerCase());
         assertThat(classMethods.get("SimpleObject".toLowerCase()).getMethods()).containsOnlyKeys("hello", "goodnumber", "greeting");
@@ -79,13 +79,13 @@ public class CliMeTest {
     }
 
     @Test
-    public void dependencyCreationByAnnotation() {
+    void dependencyCreationByAnnotation() {
         Map<String, ObjectContainer> dependencyContainer = CliMe.initializeObjects(new Reflections("com.clime.models"));
         assertThat(CliMeInitCreator.class.cast(dependencyContainer.get("CliMeInitCreator".toLowerCase()).getObject()).listNames()).contains("CorrectName :)");
     }
 
     @Test
-    public void throwIllegalArgumentWhenParametersInInit() {
+    void throwIllegalArgumentWhenParametersInInit() {
         try {
             CliMe.initializeObjects(new Reflections("com.clime.badmodels.parameters"));
             failBecauseExceptionWasNotThrown(IllegalArgumentException.class);
@@ -95,7 +95,7 @@ public class CliMeTest {
     }
 
     @Test
-    public void throwRuntimeExceptionWhenInvalidReturn() {
+    void throwRuntimeExceptionWhenInvalidReturn() {
         try {
             CliMe.initializeObjects(new Reflections("com.clime.badmodels.badreturn"));
             failBecauseExceptionWasNotThrown(RuntimeException.class);
@@ -105,7 +105,7 @@ public class CliMeTest {
     }
 
     @Test
-    public void throwRuntimeExceptionWhenNonStatic() {
+    void throwRuntimeExceptionWhenNonStatic() {
         try {
             CliMe.initializeObjects(new Reflections("com.clime.badmodels.nonstatic"));
             failBecauseExceptionWasNotThrown(RuntimeException.class);
@@ -115,7 +115,7 @@ public class CliMeTest {
     }
 
     @Test
-    public void throwRuntimeExceptionWhenMultipleInitializers() {
+    void throwRuntimeExceptionWhenMultipleInitializers() {
         try {
             CliMe.initializeObjects(new Reflections("com.clime.badmodels.multi"));
             failBecauseExceptionWasNotThrown(RuntimeException.class);
@@ -125,7 +125,7 @@ public class CliMeTest {
     }
 
     @Test
-    public void throwRuntimeExceptionWhenMultipleMethodsWithSameName() throws Exception {
+    void throwRuntimeExceptionWhenMultipleMethodsWithSameName() {
         try {
             CliMe.initializeObjects(new Reflections("com.clime.badmodels.multimethod"));
             failBecauseExceptionWasNotThrown(RuntimeException.class);
@@ -135,7 +135,7 @@ public class CliMeTest {
     }
 
     @Test
-    public void throwRuntimeExceptionWhenMultipleMethodsWithSameNameManualInject() throws Exception {
+    void throwRuntimeExceptionWhenMultipleMethodsWithSameNameManualInject() {
         try {
             CliMe.initializeObjects(Sets.newHashSet(new SameMethodName("name")));
             failBecauseExceptionWasNotThrown(RuntimeException.class);
@@ -147,7 +147,7 @@ public class CliMeTest {
     // Integration Tests
 
     @Test
-    public void callTestObjectOneHelloFromCommandLineArgs() throws Exception {
+    void callTestObjectOneHelloFromCommandLineArgs() {
         PrintStream originalOut = System.out;
         InputStream originalIn = System.in;
 
@@ -170,8 +170,8 @@ public class CliMeTest {
     }
 
     @Test
-    @Ignore("Only Supports String Args")
-    public void callTestObjectOneGoodNumberWithParameterFromCommandLineArgs() throws Exception {
+    @Disabled("Only Supports String Args")
+    public void callTestObjectOneGoodNumberWithParameterFromCommandLineArgs() {
         PrintStream originalOut = System.out;
         InputStream originalIn = System.in;
 
@@ -194,7 +194,7 @@ public class CliMeTest {
     }
 
     @Test
-    public void callTestObjectOneGreetingWithParameterFromCommandLineArgs() throws Exception {
+    void callTestObjectOneGreetingWithParameterFromCommandLineArgs() {
         PrintStream originalOut = System.out;
         InputStream originalIn = System.in;
 
@@ -217,7 +217,7 @@ public class CliMeTest {
     }
 
     @Test
-    public void injectedMapCreatesDependencyContainer() {
+    void injectedMapCreatesDependencyContainer() {
         PrintStream originalOut = System.out;
         InputStream originalIn = System.in;
 

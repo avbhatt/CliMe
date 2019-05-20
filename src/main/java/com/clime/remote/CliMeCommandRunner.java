@@ -53,11 +53,11 @@ public class CliMeCommandRunner implements CliMeRmi {
                 Object[] methodArgs = new Object[parameters.length];
                 List<String> commandLineArgs = arguments.parameters();
                 if (parameters.length != commandLineArgs.size()) {
-                    // THROW
+                    // TODO: THROW
                 }
                 for (int i = 0; i < commandLineArgs.size(); i++) {
                     if (parameters[i].getType() != String.class) {
-                        // THROW
+                        // TODO: THROW
                     }
                     methodArgs[i] = commandLineArgs.get(i);
                 }

@@ -70,12 +70,11 @@ public class CliMe {
 
     public void rmi() throws RemoteException {
         CliMeRmi stub = (CliMeRmi) UnicastRemoteObject.exportObject(cliMeCommandRunner, 0);
-        try { //special exception handler for registry creation
+        try {
             LocateRegistry.createRegistry(1099);
             logger.log(Level.FINEST, "java RMI registry created.");
             Naming.rebind("//localhost/" + prompt, stub);
         } catch (RemoteException e) {
-            //do nothing, error means registry already exists
             logger.log(Level.FINEST, "java RMI registry already exists.");
         } catch (MalformedURLException e) {
             logger.log(Level.SEVERE, "prompt must be valid in a URL", e);

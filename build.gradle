@@ -4,7 +4,7 @@ plugins {
 }
 
 group 'com.clime'
-version '1.0-SNAPSHOT'
+version 'LOCAL-SNAPSHOT'
 
 sourceCompatibility = 1.8
 

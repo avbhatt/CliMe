@@ -73,7 +73,7 @@ class CliMeTest {
     void dependencyHasMethodNameAsKey() {
         Map<String, ObjectContainer> classMethods = CliMe.initializeObjects(new Reflections("clime.models"));
         assertThat(classMethods).containsKeys("SimpleObject".toLowerCase(), "ExplicitDefaultConstructor".toLowerCase(), "ImpliedDefaultConstructor".toLowerCase());
-        assertThat(classMethods.get("SimpleObject".toLowerCase()).getMethods()).containsOnlyKeys("hello", "goodnumber", "greeting");
+        assertThat(classMethods.get("SimpleObject".toLowerCase()).getMethods()).containsOnlyKeys("hello", "goodnumber", "greeting", "goodnumberstring", "voidreturn", "getnumber");
         assertThat(classMethods.get("ImpliedDefaultConstructor".toLowerCase()).getMethods()).containsOnlyKeys("greet");
         assertThat(classMethods.get("ExplicitDefaultConstructor".toLowerCase()).getMethods()).containsOnlyKeys("getfield");
     }
@@ -188,6 +188,29 @@ class CliMeTest {
 
         String output = outContent.toString();
         assertThat(output).contains(goodNumber.toString());
+
+        System.setOut(originalOut);
+        System.setIn(originalIn);
+    }
+
+    @Test
+    public void callTestObjectOneGoodNumberStringWithParameterFromCommandLineArgs() {
+        PrintStream originalOut = System.out;
+        InputStream originalIn = System.in;
+
+        ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(outContent));
+        String args = "SimpleObject goodNumberString 100";
+        ByteArrayInputStream inputContent = new ByteArrayInputStream(args.getBytes());
+        System.setIn(inputContent);
+
+        CliMe cliMe = new CliMe("cli", "clime.models");
+        cliMe.interactive();
+
+        Integer goodNumberFromString = new SimpleObject().goodNumberString("100");
+
+        String output = outContent.toString();
+        assertThat(output).contains(goodNumberFromString.toString());
 
         System.setOut(originalOut);
         System.setIn(originalIn);

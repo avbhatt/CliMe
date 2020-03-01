@@ -43,6 +43,10 @@ public class CliMe {
         this.commandRunner = new CommandRunner(dependencyContainer);
     }
 
+    public String run(String... args) {
+        return commandRunner.run(args);
+    }
+
     public void interactive() {
         try {
             ArgCollector argCollector;

@@ -3,7 +3,7 @@ package com.clime;
 import com.google.common.collect.Lists;
 import java.util.List;
 
-public class Arguments {
+class Arguments {
 
     private String command;
     private String subCommand;
@@ -22,35 +22,35 @@ public class Arguments {
     }
 
 
-    public String command() {
+    String command() {
         return command;
     }
 
-    public String subCommand() {
+    String subCommand() {
         return subCommand;
     }
 
-    public List<String> parameters() {
+    List<String> parameters() {
         return parameters;
     }
 
-    public static Builder newBuilder() {
+    static Builder newBuilder() {
         return new Builder();
     }
 
-    public boolean exit() {
+    boolean exit() {
         return exit;
     }
 
-    public boolean help() {
+    boolean help() {
         return help;
     }
 
-    public boolean helpSubCommand() {
+    boolean helpSubCommand() {
         return helpSubCommand;
     }
 
-    public static class Builder {
+    static class Builder {
 
         private String command;
         private String subCommand;
@@ -59,17 +59,17 @@ public class Arguments {
         private boolean help;
         private boolean helpSubCommand;
 
-        public Builder withCommand(String command) {
+        Builder withCommand(String command) {
             this.command = command.toLowerCase();
             return this;
         }
 
-        public Builder withSubCommand(String subCommand) {
+        Builder withSubCommand(String subCommand) {
             this.subCommand = subCommand.toLowerCase();
             return this;
         }
 
-        public Builder withParameter(String param) {
+        Builder withParameter(String param) {
             if (parameters == null) {
                 parameters = Lists.newLinkedList();
             }
@@ -77,19 +77,19 @@ public class Arguments {
             return this;
         }
 
-        public void exit() {
+        void exit() {
             exit = true;
         }
 
-        public void help() {
+        void help() {
             help = true;
         }
 
-        public void helpSubCommand() {
+        void helpSubCommand() {
             helpSubCommand = true;
         }
 
-        public Arguments build() {
+        Arguments build() {
             return new Arguments(this);
         }
     }

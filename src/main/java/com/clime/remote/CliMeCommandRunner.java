@@ -63,7 +63,7 @@ public class CliMeCommandRunner implements CliMeRmi {
                 }
                 for (int i = 0; i < commandLineArgs.size(); i++) {
                     if (parameters[i].getType() != String.class) {
-                        throw new CliMeUsageException("CliMe requires String or void return types\n" + buildHelpMessageForCommand(className));
+                        throw new CliMeUsageException("CliMe requires String parameter types\n" + buildHelpMessageForCommand(className));
                     }
                     methodArgs[i] = commandLineArgs.get(i);
                 }

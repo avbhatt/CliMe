@@ -68,10 +68,10 @@ public class CliMe {
         }
     }
 
-    public void rmi() throws RemoteException {
+    public void rmi(int port) throws RemoteException {
         CliMeRmi stub = (CliMeRmi) UnicastRemoteObject.exportObject(cliMeCommandRunner, 0);
         try {
-            LocateRegistry.createRegistry(1099);
+            LocateRegistry.createRegistry(port);
             logger.log(Level.FINEST, "java RMI registry created.");
             Naming.rebind("//localhost/" + prompt, stub);
         } catch (RemoteException e) {
@@ -79,6 +79,10 @@ public class CliMe {
         } catch (MalformedURLException e) {
             logger.log(Level.SEVERE, "prompt must be valid in a URL", e);
         }
+    }
+
+    public void rmi() throws RemoteException {
+        rmi(1099);
     }
 
     public CliMeCommandRunner commandRunner() {

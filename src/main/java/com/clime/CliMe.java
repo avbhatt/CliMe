@@ -25,7 +25,7 @@ import org.reflections.Reflections;
 public class CliMe {
 
     private static Logger logger = Logger.getLogger(CliMe.class.getName());
-    private static final Pattern inputEnd = Pattern.compile("\\z");
+    private static final Pattern inputEnd = Pattern.compile("\\Z");
     private CliMeCommandRunner cliMeCommandRunner;
 
     private Map<String, ObjectContainer> dependencyContainer;

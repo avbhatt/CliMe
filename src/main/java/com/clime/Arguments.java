@@ -9,12 +9,16 @@ public class Arguments {
     private String subCommand;
     private List<String> parameters;
     private boolean exit;
+    private boolean help;
+    private boolean helpSubCommand;
 
-    public Arguments(Builder builder) {
+    private Arguments(Builder builder) {
         command = builder.command;
         subCommand = builder.subCommand;
         parameters = builder.parameters;
         exit = builder.exit;
+        help = builder.help;
+        helpSubCommand = builder.helpSubCommand;
     }
 
 
@@ -38,12 +42,22 @@ public class Arguments {
         return exit;
     }
 
+    public boolean help() {
+        return help;
+    }
+
+    public boolean helpSubCommand() {
+        return helpSubCommand;
+    }
+
     public static class Builder {
 
         private String command;
         private String subCommand;
         private List<String> parameters;
         private boolean exit;
+        private boolean help;
+        private boolean helpSubCommand;
 
         public Builder withCommand(String command) {
             this.command = command.toLowerCase();
@@ -65,6 +79,14 @@ public class Arguments {
 
         public void exit() {
             exit = true;
+        }
+
+        public void help() {
+            help = true;
+        }
+
+        public void helpSubCommand() {
+            helpSubCommand = true;
         }
 
         public Arguments build() {

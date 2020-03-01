@@ -66,4 +66,67 @@ class CliMeCommandRunnerTest {
 
         assertThat(cliMeCommandRunner.run(args.split(" "))).isNull();
     }
+
+    @Test
+    void helpSubCommandReturnsPossibleMethods() {
+        String args = "SimpleObject help";
+        CliMeCommandRunner cliMeCommandRunner = new CliMe("cli", "com.clime.models").commandRunner();
+
+        assertThat(cliMeCommandRunner.run(args.split(" ")))
+            .containsIgnoringCase("greeting")
+            .containsIgnoringCase("string")
+            .containsIgnoringCase("hello");
+    }
+
+    @Test
+    void helpCommandReturnsPossibleCommands() {
+        String args = "help";
+        CliMeCommandRunner cliMeCommandRunner = new CliMe("cli", "com.clime.models").commandRunner();
+
+        assertThat(cliMeCommandRunner.run(args.split(" ")))
+            .containsIgnoringCase("climeinitcreator")
+            .containsIgnoringCase("implieddefaultconstructor")
+            .containsIgnoringCase("explicitdefaultconstructor")
+            .containsIgnoringCase("exceptionthrower")
+            .containsIgnoringCase("simpleObject")
+            .containsIgnoringCase("getfield")
+            .containsIgnoringCase("greeting")
+            .containsIgnoringCase("string")
+            .containsIgnoringCase("hello");
+    }
+
+    @Test
+    void run_ExceptionToStringOnInvocationTarget() {
+        String args = "ExceptionThrower bigSad";
+        CliMeCommandRunner cliMeCommandRunner = new CliMe("cli", "com.clime.models").commandRunner();
+
+        assertThat(cliMeCommandRunner.run(args.split(" ")))
+            .containsIgnoringCase("Exception in remote method for command")
+            .containsIgnoringCase("exceptionthrower")
+            .containsIgnoringCase("bigsad");
+    }
+
+    @Test
+    void run_BadParameterLength() {
+        String args = "SimpleObject greeting Hey_Whats_Up plus nonsense";
+        CliMeCommandRunner cliMeCommandRunner = new CliMe("cli", "com.clime.models").commandRunner();
+
+        assertThat(cliMeCommandRunner.run(args.split(" ")))
+            .containsIgnoringCase("climeusageexception")
+            .containsIgnoringCase("greeting")
+            .containsIgnoringCase("string")
+            .containsIgnoringCase("hello");
+    }
+
+    @Test
+    void run_BadReturnType() {
+        String args = "SimpleObject goodNumber 5";
+        CliMeCommandRunner cliMeCommandRunner = new CliMe("cli", "com.clime.models").commandRunner();
+
+        assertThat(cliMeCommandRunner.run(args.split(" ")))
+            .containsIgnoringCase("climeusageexception")
+            .containsIgnoringCase("greeting")
+            .containsIgnoringCase("string")
+            .containsIgnoringCase("hello");
+    }
 }

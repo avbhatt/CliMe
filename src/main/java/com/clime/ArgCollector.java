@@ -8,7 +8,7 @@ import java.util.regex.Pattern;
 public class ArgCollector {
 
     private Arguments.Builder argBuilder = Arguments.newBuilder();
-    private static final Pattern inputEnd = Pattern.compile("\\z");
+    private static final Pattern inputEnd = Pattern.compile("\\Z");
     private static final Pattern param = Pattern.compile("(\".*?\"|\\S+)");
 
     public ArgCollector(String argLine) throws CliMeUsageException {
@@ -19,26 +19,33 @@ public class ArgCollector {
         Scanner scanner = new Scanner(argLine);
         if (scanner.hasNext()) {
             String command = scanner.next();
-            if (!command.equalsIgnoreCase("exit") || scanner.hasNext()) {
+            if (command.equalsIgnoreCase("exit") && !scanner.hasNext()) {
+                argBuilder.exit();
+            } else if (command.equalsIgnoreCase("help") && !scanner.hasNext()) {
+                argBuilder.help();
+            } else {
                 argBuilder.withCommand(command);
                 if (scanner.hasNext()) {
-                    argBuilder.withSubCommand(scanner.next());
+                    String subCommand = scanner.next();
+                    if (subCommand.equalsIgnoreCase("help")) {
+                        argBuilder.helpSubCommand();
+                    } else {
+                        argBuilder.withSubCommand(subCommand);
+                        scanner.useDelimiter(inputEnd);
+                        if (scanner.hasNext()) {
+                            buildParameters(scanner.next());
+                        }
+                    }
                 } else {
-                    throw new CliMeUsageException("<SUB_COMMAND> required as second argument.");
+                    throw new CliMeUsageException("<SUB_COMMAND> or HELP required as second argument.");
                 }
-                scanner.useDelimiter(inputEnd);
-                if (scanner.hasNext()) {
-                    buildParameters(scanner.next());
-                }
-            } else {
-                argBuilder.exit();
             }
         } else {
             throw new CliMeUsageException("<COMMAND> required as first argument.");
         }
     }
 
-    private void buildParameters(String parameters) throws CliMeUsageException {
+    private void buildParameters(String parameters) {
         parameters = parameters.trim();
         if (parameters.isEmpty()) {
             return;

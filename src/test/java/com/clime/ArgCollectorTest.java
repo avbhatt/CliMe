@@ -132,4 +132,25 @@ class ArgCollectorTest {
         assertThat(arguments.exit()).isFalse();
     }
 
+    @Test
+    void collectHelpSubCommandMessage() throws CliMeUsageException {
+        String command = "bestCommand help";
+        argCollector = new ArgCollector(command);
+
+        Arguments arguments = argCollector.getArguments();
+
+        assertThat(arguments.help()).isFalse();
+        assertThat(arguments.helpSubCommand()).isTrue();
+    }
+
+    @Test
+    void collectHelpCommand() throws CliMeUsageException {
+        String command = "help";
+        argCollector = new ArgCollector(command);
+
+        Arguments arguments = argCollector.getArguments();
+
+        assertThat(arguments.help()).isTrue();
+    }
+
 }

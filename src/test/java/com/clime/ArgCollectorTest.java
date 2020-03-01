@@ -79,7 +79,7 @@ class ArgCollectorTest {
     }
 
     @Test
-    void exceptionWhenNoCommand() throws Exception {
+    void exceptionWhenNoCommand() {
         String command = "";
 
         try {
@@ -91,7 +91,7 @@ class ArgCollectorTest {
     }
 
     @Test
-    void exceptionWhenNoSubCommand() throws Exception {
+    void exceptionWhenNoSubCommand() {
         String command = "bestCommand";
 
         try {
@@ -103,7 +103,7 @@ class ArgCollectorTest {
     }
 
     @Test
-    void collectLongParameters() throws Exception {
+    void collectLongParameters() throws CliMeUsageException {
         String command = "bestCommand okSubCommand \"val1 is best value\" \"me is good dude\"";
         argCollector = new ArgCollector(command);
 
@@ -118,7 +118,23 @@ class ArgCollectorTest {
     }
 
     @Test
-    void collectHyphenAndUnderscoreParameters() throws Exception {
+    void collectQuoteAndNonQuotes() throws CliMeUsageException {
+        String command = "assets vinstoassets \"3VW2K7AJ3EM425734\" 3C4FY58B15T609761 \"1N6BA0CH2DN311068\"";
+        argCollector = new ArgCollector(command);
+
+        Arguments arguments = argCollector.getArguments();
+
+        assertThat(arguments.command()).isEqualToIgnoringCase("assets");
+        assertThat(arguments.subCommand()).isEqualToIgnoringCase("vinstoassets");
+        assertThat(arguments.parameters().get(0)).isEqualToIgnoringCase("3VW2K7AJ3EM425734");
+        assertThat(arguments.parameters().get(1)).isEqualToIgnoringCase("3C4FY58B15T609761");
+        assertThat(arguments.parameters().get(2)).isEqualToIgnoringCase("1N6BA0CH2DN311068");
+        assertThat(arguments.parameters().size()).isEqualTo(3);
+        assertThat(arguments.exit()).isFalse();
+    }
+
+    @Test
+    void collectHyphenAndUnderscoreParameters() throws CliMeUsageException {
         String command = "bestCommand okSubCommand val1_is_best_value me-is-good-dude";
         argCollector = new ArgCollector(command);
 

@@ -6,6 +6,7 @@ import com.clime.exceptions.CliMeUsageException;
 import com.clime.remote.CliMeRmi;
 import com.clime.remote.RemoteCommandRunner;
 import com.google.common.collect.Maps;
+
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -20,6 +21,7 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
+
 import org.reflections.Reflections;
 
 public class CliMe {
@@ -30,6 +32,14 @@ public class CliMe {
 
     private Map<String, ObjectContainer> dependencyContainer;
     private String prompt;
+
+    public CliMe(String packageToScan) {
+        this("clime", packageToScan);
+    }
+
+    public CliMe(Set<Object> dependencies) {
+        this("clime", dependencies);
+    }
 
     public CliMe(String prompt, String packageToScan) {
         this.prompt = prompt;
@@ -100,8 +110,8 @@ public class CliMe {
             String className = clazz.getSimpleName();
             if (dependencyContainer.containsKey(className.toLowerCase())) {
                 IllegalArgumentException illegalArgumentException = new IllegalArgumentException(clazz.getName()
-                    + " command conflicts with "
-                    + dependencyContainer.get(clazz.getSimpleName().toLowerCase()).getObject().getClass().getName());
+                        + " command conflicts with "
+                        + dependencyContainer.get(clazz.getSimpleName().toLowerCase()).getObject().getClass().getName());
                 logger.log(Level.SEVERE, illegalArgumentException.toString(), illegalArgumentException);
                 throw illegalArgumentException;
             }
@@ -124,13 +134,13 @@ public class CliMe {
                                     o = method.invoke(null);
                                 } else {
                                     IllegalArgumentException illegalArgumentException = new IllegalArgumentException(
-                                        "CliMeInit requires a no-arg initializer");
+                                            "CliMeInit requires a no-arg initializer");
                                     logger.log(Level.SEVERE, illegalArgumentException.toString(), illegalArgumentException);
                                     throw illegalArgumentException;
                                 }
                             } else {
                                 RuntimeException runtimeException = new RuntimeException(
-                                    "CliMeInit requires initializer to return the same type as the object (" + clazz.getName() + ")");
+                                        "CliMeInit requires initializer to return the same type as the object (" + clazz.getName() + ")");
                                 logger.log(Level.SEVERE, runtimeException.toString(), runtimeException);
                                 throw runtimeException;
                             }
@@ -154,8 +164,8 @@ public class CliMe {
         } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
             RuntimeException runtimeException = new RuntimeException("Error in creating object of type " + clazz.getName(), e);
             logger.log(Level.SEVERE, "CliMe could not create object of type "
-                + clazz.getName()
-                + "\nPerhaps try CliMe(String prompt, Set<Object> dependencies) to manually inject command objects", runtimeException);
+                    + clazz.getName()
+                    + "\nPerhaps try CliMe(String prompt, Set<Object> dependencies) to manually inject command objects", runtimeException);
             throw runtimeException;
         }
 
@@ -167,8 +177,8 @@ public class CliMe {
         for (Object o : dependencies) {
             if (dependencyContainer.containsKey(o.getClass().getSimpleName().toLowerCase())) {
                 IllegalArgumentException illegalArgumentException = new IllegalArgumentException(o.getClass().getName()
-                    + " command conflicts with "
-                    + dependencyContainer.get(o.getClass().getSimpleName().toLowerCase()).getObject().getClass().getName());
+                        + " command conflicts with "
+                        + dependencyContainer.get(o.getClass().getSimpleName().toLowerCase()).getObject().getClass().getName());
                 logger.log(Level.SEVERE, "CliMe requires unique class (command) names", illegalArgumentException);
                 throw illegalArgumentException;
             } else {
@@ -190,8 +200,8 @@ public class CliMe {
         String methodName = method.getName();
         if (methods.containsKey(methodName.toLowerCase())) {
             RuntimeException runtimeException = new RuntimeException(
-                "CliMe requires unique method (subcommand) names. Method " + methodName + " already defined in class (command)" + method
-                    .getDeclaringClass().getSimpleName());
+                    "CliMe requires unique method (subcommand) names. Method " + methodName + " already defined in class (command)" + method
+                            .getDeclaringClass().getSimpleName());
             logger.log(Level.SEVERE, runtimeException.toString(), runtimeException);
             throw runtimeException;
         }

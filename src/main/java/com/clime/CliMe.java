@@ -3,8 +3,8 @@ package com.clime;
 import com.clime.annotations.CliMeCommand;
 import com.clime.annotations.CliMeInit;
 import com.clime.exceptions.CliMeUsageException;
-import com.clime.remote.CliMeCommandRunner;
 import com.clime.remote.CliMeRmi;
+import com.clime.remote.RemoteCommandRunner;
 import com.google.common.collect.Maps;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -26,7 +26,7 @@ public class CliMe {
 
     private static Logger logger = Logger.getLogger(CliMe.class.getName());
     private static final Pattern inputEnd = Pattern.compile("\\Z");
-    private CliMeCommandRunner cliMeCommandRunner;
+    private CommandRunner commandRunner;
 
     private Map<String, ObjectContainer> dependencyContainer;
     private String prompt;
@@ -34,13 +34,13 @@ public class CliMe {
     public CliMe(String prompt, String packageToScan) {
         this.prompt = prompt;
         this.dependencyContainer = initializeObjects(new Reflections(packageToScan));
-        this.cliMeCommandRunner = new CliMeCommandRunner(dependencyContainer);
+        this.commandRunner = new CommandRunner(dependencyContainer);
     }
 
     public CliMe(String prompt, Set<Object> dependencies) {
         this.prompt = prompt;
         this.dependencyContainer = initializeObjects(dependencies);
-        this.cliMeCommandRunner = new CliMeCommandRunner(dependencyContainer);
+        this.commandRunner = new CommandRunner(dependencyContainer);
     }
 
     public void interactive() {
@@ -60,7 +60,7 @@ public class CliMe {
                 if (arguments.exit()) {
                     break;
                 }
-                System.out.println(cliMeCommandRunner.run(arguments));
+                System.out.println(commandRunner.run(arguments));
             }
         } catch (Exception e) {
             logger.log(Level.SEVERE, e.toString(), e);
@@ -69,7 +69,7 @@ public class CliMe {
     }
 
     public void rmi(int port) throws RemoteException {
-        CliMeRmi stub = (CliMeRmi) UnicastRemoteObject.exportObject(cliMeCommandRunner, 0);
+        CliMeRmi stub = (CliMeRmi) UnicastRemoteObject.exportObject(new RemoteCommandRunner(commandRunner), 0);
         try {
             LocateRegistry.createRegistry(port);
             logger.log(Level.FINEST, "java RMI registry created.");
@@ -85,8 +85,8 @@ public class CliMe {
         rmi(1099);
     }
 
-    public CliMeCommandRunner commandRunner() {
-        return cliMeCommandRunner;
+    public CommandRunner commandRunner() {
+        return commandRunner;
     }
 
     static Map<String, ObjectContainer> initializeObjects(Reflections reflections) {

@@ -1,9 +1,8 @@
-package com.clime.remote;
+package com.clime;
 
-import com.clime.ArgCollector;
-import com.clime.Arguments;
-import com.clime.ObjectContainer;
 import com.clime.exceptions.CliMeUsageException;
+import com.clime.remote.CliMeRmi;
+
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
@@ -12,16 +11,15 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class CliMeCommandRunner implements CliMeRmi {
+public class CommandRunner {
 
-    private static Logger logger = Logger.getLogger(CliMeCommandRunner.class.getName());
+    private static Logger logger = Logger.getLogger(CommandRunner.class.getName());
     private Map<String, ObjectContainer> dependencyContainer;
 
-    public CliMeCommandRunner(Map<String, ObjectContainer> dependencyContainer) {
+    public CommandRunner(Map<String, ObjectContainer> dependencyContainer) {
         this.dependencyContainer = dependencyContainer;
     }
 
-    @Override
     public String run(String... args) {
         try {
             ArgCollector argCollector = new ArgCollector(String.join(" ", args));
@@ -30,7 +28,6 @@ public class CliMeCommandRunner implements CliMeRmi {
             logger.log(Level.SEVERE, e.toString(), e);
             return e.toString();
         }
-
     }
 
     public String run(Arguments arguments) throws CliMeUsageException {

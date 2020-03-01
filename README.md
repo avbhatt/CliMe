@@ -46,3 +46,7 @@ There are 3 ways to use the CliMe framework:
 ## Stateful through RMI
 
 `new CliMe(<PROMPT>, <PACKAGE_TO_SCAN>).rmi()`
+
+## Package Repository
+
+Add library via [JitPack](https://jitpack.io/#avbhatt/CliMe)
